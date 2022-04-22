@@ -1,6 +1,7 @@
 package com.example.musicplayer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -36,6 +37,13 @@ Context context;
         } else {
             Glide.with(context).load(R.drawable.itunes).into(holder.albumArt);
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context,PlayerActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
