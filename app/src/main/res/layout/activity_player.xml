@@ -104,7 +104,7 @@
         android:background="@drawable/gradient_bg">
 
         <ImageView
-            android:id="@+id/id_previous"
+            android:id="@+id/id_shuffle"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:src="@drawable/icon_shuffle_off"
@@ -113,7 +113,7 @@
             android:layout_marginStart="32dp"/>
 
         <ImageView
-            android:id="@+id/id_shuffle"
+            android:id="@+id/id_previous"
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_centerVertical="true"

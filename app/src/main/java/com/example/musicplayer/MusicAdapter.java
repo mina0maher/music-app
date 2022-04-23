@@ -41,6 +41,7 @@ Context context;
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context,PlayerActivity.class);
+                intent.putExtra("position",position);
                 context.startActivity(intent);
             }
         });
