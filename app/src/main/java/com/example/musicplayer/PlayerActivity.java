@@ -4,14 +4,17 @@ import static com.example.musicplayer.MainActivity.musicFiles;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -27,12 +30,16 @@ public class PlayerActivity extends AppCompatActivity {
     static ArrayList<MusicFiles> listSongs= new ArrayList<>();
     static MediaPlayer mediaPlayer;
     private Handler handler = new Handler();
+    private Thread playThread,prevThread, nextThread;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
         initView();
         getIntentMethod();
+        songName.setText(listSongs.get(position).getTitle());
+        artistName.setText(listSongs.get(position).getArtist());
+
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -62,6 +69,70 @@ public class PlayerActivity extends AppCompatActivity {
                 handler.postDelayed(this,1000);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        playThreadBtn();
+        nextThreadBtn();
+        prevThreadBtn();
+        super.onResume();
+    }
+
+    private void prevThreadBtn() {
+
+    }
+
+    private void nextThreadBtn() {
+
+    }
+
+    private void playThreadBtn() {
+        playThread = new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                playPauseBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        playPauseBtnClicked();
+                    }
+                });
+            }
+        };
+        playThread.start();
+    }
+
+    private void playPauseBtnClicked() {
+        if(mediaPlayer.isPlaying()){
+            playPauseBtn.setImageResource(R.drawable.icon_play);
+            mediaPlayer.pause();
+            seekBar.setMax(mediaPlayer.getDuration()/1000);
+            PlayerActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(mediaPlayer!=null) {
+                        int mCurrentPosition = mediaPlayer.getCurrentPosition() / 1000;
+                        seekBar.setProgress(mCurrentPosition);
+                    }
+                    handler.postDelayed(this,1000);
+                }
+            });
+        }else{
+            playPauseBtn.setImageResource(R.drawable.icon_pause);
+            mediaPlayer.start();
+            seekBar.setMax(mediaPlayer.getDuration()/1000);
+            PlayerActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if(mediaPlayer!=null) {
+                        int mCurrentPosition = mediaPlayer.getCurrentPosition() / 1000;
+                        seekBar.setProgress(mCurrentPosition);
+                    }
+                    handler.postDelayed(this,1000);
+                }
+            });
+        }
     }
 
     private String formattedTime(int mCurrentPosition) {
@@ -95,6 +166,7 @@ public class PlayerActivity extends AppCompatActivity {
             mediaPlayer.start();
         }
         seekBar.setMax(mediaPlayer.getDuration()/1000);
+        metaData(uri);
 
     }
 
@@ -113,5 +185,18 @@ public class PlayerActivity extends AppCompatActivity {
 
         playPauseBtn = findViewById(R.id.play_pause);
         seekBar = findViewById(R.id.seek_bar);
+    }
+
+    private void metaData(Uri uri){
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(uri.toString());
+        int dTotal = Integer.parseInt(listSongs.get(position).getDuration())/1000;
+        durationTotal.setText(formattedTime(dTotal));
+        byte[] art = retriever.getEmbeddedPicture();
+        if(art != null){
+            Glide.with(this).asBitmap().load(art).into(coverArt);
+        }else{
+            Glide.with(this).asBitmap().load(R.drawable.itunes).into(coverArt);
+        }
     }
 }
