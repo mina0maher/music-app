@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.palette.graphics.Palette;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -16,6 +17,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
@@ -26,7 +29,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
-public class PlayerActivity extends AppCompatActivity {
+public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnCompletionListener {
     TextView songName, artistName, durationPlayed, durationTotal;
     ImageView coverArt, nextBtn, prevBtn, backBtn, shuffleBtn, repeatBtn;
     FloatingActionButton playPauseBtn;
@@ -46,7 +49,7 @@ public class PlayerActivity extends AppCompatActivity {
         getIntentMethod();
         songName.setText(listSongs.get(position).getTitle());
         artistName.setText(listSongs.get(position).getArtist());
-
+        mediaPlayer.setOnCompletionListener(this);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -123,7 +126,8 @@ public class PlayerActivity extends AppCompatActivity {
                     handler.postDelayed(this,1000);
                 }
             });
-            playPauseBtn.setImageResource(R.drawable.icon_pause);
+            mediaPlayer.setOnCompletionListener(this);
+            playPauseBtn.setBackgroundResource(R.drawable.icon_pause);
             mediaPlayer.start();
         }else{
             mediaPlayer.stop();
@@ -145,7 +149,7 @@ public class PlayerActivity extends AppCompatActivity {
                     handler.postDelayed(this,1000);
                 }
             });
-            playPauseBtn.setImageResource(R.drawable.icon_play);
+            playPauseBtn.setBackgroundResource(R.drawable.icon_play);
         }
     }
 
@@ -186,7 +190,8 @@ public class PlayerActivity extends AppCompatActivity {
                     handler.postDelayed(this,1000);
                 }
             });
-            playPauseBtn.setImageResource(R.drawable.icon_pause);
+            mediaPlayer.setOnCompletionListener(this);
+            playPauseBtn.setBackgroundResource(R.drawable.icon_pause);
             mediaPlayer.start();
         }else{
             mediaPlayer.stop();
@@ -208,7 +213,7 @@ public class PlayerActivity extends AppCompatActivity {
                     handler.postDelayed(this,1000);
                 }
             });
-            playPauseBtn.setImageResource(R.drawable.icon_play);
+            playPauseBtn.setBackgroundResource(R.drawable.icon_play);
         }
     }
 
@@ -320,8 +325,8 @@ public class PlayerActivity extends AppCompatActivity {
         byte[] art = retriever.getEmbeddedPicture();
         Bitmap bitmap;
         if(art != null){
-            Glide.with(this).asBitmap().load(art).into(coverArt);
             bitmap = BitmapFactory.decodeByteArray(art,0,art.length);
+            imageAnimation(this,coverArt,bitmap);
             Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
                 @Override
                 public void onGenerated(@Nullable Palette palette) {
@@ -359,6 +364,54 @@ public class PlayerActivity extends AppCompatActivity {
             mContainer.setBackgroundResource(R.drawable.main_bg);
             songName.setTextColor(Color.WHITE);
             artistName.setTextColor(Color.DKGRAY);
+        }
+    }
+    public void imageAnimation(Context context,ImageView imageView,Bitmap bitmap){
+        Animation animOut = AnimationUtils.loadAnimation(context, android.R.anim.fade_out);
+        Animation animIn = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
+        animOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                Glide.with(context).load(bitmap).into(imageView);
+                animIn.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+                imageView.startAnimation(animIn);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        imageView.startAnimation(animOut);
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mediaPlayer) {
+        nextBtnClicked();
+        if(mediaPlayer != null){
+            mediaPlayer = MediaPlayer.create(getApplicationContext(),uri);
+            mediaPlayer.start();
+            mediaPlayer.setOnCompletionListener(this);
         }
     }
 }
