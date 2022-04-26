@@ -55,12 +55,13 @@
             android:layout_height="match_parent"
             android:src="@drawable/itunes"
             android:scaleType="centerCrop"/>
+
         <ImageView
             android:id="@+id/image_view_gradient"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:src="@drawable/gradient_bg"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"
+             />
 
     </RelativeLayout>
     <TextView
