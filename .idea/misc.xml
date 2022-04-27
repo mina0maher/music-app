@@ -6,7 +6,9 @@
         <entry key="..\:/Users/maher/AndroidStudioProjects/MusicPlayer/app/src/main/res/drawable/gradient_bg.xml" value="0.1" />
         <entry key="..\:/Users/maher/AndroidStudioProjects/MusicPlayer/app/src/main/res/drawable/icon_left.xml" value="0.1" />
         <entry key="..\:/Users/maher/AndroidStudioProjects/MusicPlayer/app/src/main/res/drawable/icon_menu.xml" value="0.1" />
+        <entry key="..\:/Users/maher/AndroidStudioProjects/MusicPlayer/app/src/main/res/drawable/icon_more.xml" value="0.1" />
         <entry key="..\:/Users/maher/AndroidStudioProjects/MusicPlayer/app/src/main/res/drawable/icon_pause.xml" value="0.1" />
+        <entry key="..\:/Users/maher/AndroidStudioProjects/MusicPlayer/app/src/main/res/drawable/icon_play.xml" value="0.2195" />
         <entry key="..\:/Users/maher/AndroidStudioProjects/MusicPlayer/app/src/main/res/drawable/icon_repeat_off.xml" value="0.1" />
         <entry key="..\:/Users/maher/AndroidStudioProjects/MusicPlayer/app/src/main/res/drawable/icon_repeat_on.xml" value="0.1" />
         <entry key="..\:/Users/maher/AndroidStudioProjects/MusicPlayer/app/src/main/res/drawable/icon_shuffle_off.xml" value="0.1" />
@@ -19,6 +21,7 @@
         <entry key="..\:/Users/maher/AndroidStudioProjects/MusicPlayer/app/src/main/res/layout/albums_fragment.xml" value="0.22530996152201796" />
         <entry key="..\:/Users/maher/AndroidStudioProjects/MusicPlayer/app/src/main/res/layout/music_item.xml" value="0.1" />
         <entry key="..\:/Users/maher/AndroidStudioProjects/MusicPlayer/app/src/main/res/layout/songs_fragment.xml" value="0.1" />
+        <entry key="..\:/Users/maher/AndroidStudioProjects/MusicPlayer/app/src/main/res/menu/popup.xml" value="0.16682113067655235" />
       </map>
     </option>
   </component>

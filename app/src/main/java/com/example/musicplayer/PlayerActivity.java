@@ -260,7 +260,9 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
                     handler.postDelayed(this,1000);
                 }
             });
+            mediaPlayer.setOnCompletionListener(this);
             playPauseBtn.setBackgroundResource(R.drawable.icon_play);
+            mediaPlayer.start();
         }
     }
 
@@ -456,8 +458,8 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
     public void onCompletion(MediaPlayer mediaPlayer) {
         nextBtnClicked();
         if(mediaPlayer != null){
-            mediaPlayer = MediaPlayer.create(getApplicationContext(),uri);
-            mediaPlayer.start();
+           // mediaPlayer = MediaPlayer.create(getApplicationContext(),uri);
+         //   mediaPlayer.start();
             mediaPlayer.setOnCompletionListener(this);
         }
     }

@@ -108,7 +108,8 @@ static boolean shuffleBoolean = false, repeatBoolean = false;
                 MediaStore.Audio.Media.TITLE,
                 MediaStore.Audio.Media.DURATION,
                 MediaStore.Audio.Media.DATA,
-                MediaStore.Audio.Media.ARTIST};
+                MediaStore.Audio.Media.ARTIST,
+                MediaStore.Audio.Media._ID};
         Cursor cursor = context.getContentResolver().query(uri,projection,null,null,null);
         if(cursor!=null){
             while (cursor.moveToNext()){
@@ -117,8 +118,8 @@ static boolean shuffleBoolean = false, repeatBoolean = false;
                 String duration = cursor.getString(2);
                 String path = cursor.getString(3);
                 String artist = cursor.getString(4);
-                tempAudioList.add(new MusicFiles(path,title,artist,album,duration));
-                Log.d("jmaa","path : " + path +  " : album : "+album);
+                String id =cursor.getString(5);
+                tempAudioList.add(new MusicFiles(path,title,artist,album,duration,id));
 
             }
             cursor.close();
