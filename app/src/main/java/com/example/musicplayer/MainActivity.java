@@ -67,7 +67,10 @@ static ArrayList<MusicFiles> albums = new ArrayList<>();
         viewPagerAdapter.addFragments(new SongsFragment(),"Songs");
         viewPagerAdapter.addFragments(new AlbumsFragment(),"Albums");
         viewPager.setAdapter(viewPagerAdapter);
+        tabLayout.setSelectedTabIndicatorGravity(TabLayout.INDICATOR_GRAVITY_BOTTOM);
+
         tabLayout.setupWithViewPager(viewPager);
+
     }
     public static class ViewPagerAdapter extends FragmentPagerAdapter{
         private ArrayList<Fragment>fragments;

@@ -49,19 +49,19 @@
         android:layout_height="350dp"
         android:layout_below="@+id/layout_top_btn"
         >
+
         <ImageView
             android:id="@+id/cover_art"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/itunes"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            android:src="@drawable/itunes" />
 
         <ImageView
             android:id="@+id/image_view_gradient"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:layout_alignParentBottom="true"
-             />
+            android:layout_alignParentBottom="true" />
 
     </RelativeLayout>
     <TextView

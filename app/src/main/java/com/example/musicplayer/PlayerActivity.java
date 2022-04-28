@@ -54,6 +54,18 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         songName.setText(listSongs.get(position).getTitle());
         artistName.setText(listSongs.get(position).getArtist());
         mediaPlayer.setOnCompletionListener(this);
+
+        if(repeatBoolean){
+            repeatBtn.setImageResource(R.drawable.icon_repeat_off);
+        }else{
+            repeatBtn.setImageResource(R.drawable.icon_repeat_on);
+        }
+        if(shuffleBoolean){
+            shuffleBtn.setImageResource(R.drawable.icon_shuffle_off);
+        }else{
+            shuffleBtn.setImageResource(R.drawable.icon_shuffle_on);
+        }
+
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -107,6 +119,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
                 }
             }
         });
+
     }
 
     @Override
@@ -412,7 +425,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
                 }
             });
         }else{
-            Glide.with(this).asBitmap().load(R.drawable.itunes).into(coverArt);
+            Glide.with(getApplicationContext()).asBitmap().load(R.drawable.itunes).into(coverArt);
             ImageView gradient = findViewById(R.id.image_view_gradient);
             RelativeLayout mContainer = findViewById(R.id.mContainer);
             gradient.setBackgroundResource(R.drawable.gradient_bg);
@@ -432,7 +445,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                Glide.with(context).load(bitmap).into(imageView);
+                Glide.with(getApplicationContext()).load(bitmap).into(imageView);
                 animIn.setAnimationListener(new Animation.AnimationListener() {
                     @Override
                     public void onAnimationStart(Animation animation) {
