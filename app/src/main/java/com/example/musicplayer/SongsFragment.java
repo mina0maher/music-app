@@ -33,7 +33,9 @@ MusicAdapter musicAdapter;
             musicAdapter = new MusicAdapter();
             musicAdapter.setList(musicFiles);
             recyclerView.setAdapter(musicAdapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext(),RecyclerView.VERTICAL,false));
+
+          //  recyclerView.setNestedScrollingEnabled(false);
+            recyclerView.setLayoutManager(new CustomLayoutManager(getContext(),RecyclerView.VERTICAL,false));
         }
 
         return view;
