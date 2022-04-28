@@ -1,5 +1,6 @@
 package com.example.musicplayer;
 
+import static com.example.musicplayer.MainActivity.albums;
 import static com.example.musicplayer.MainActivity.musicFiles;
 
 import android.os.Bundle;
@@ -29,8 +30,8 @@ public class AlbumsFragment extends Fragment {
         View view=inflater.inflate(R.layout.albums_fragment, container, false);
         recyclerView = view.findViewById(R.id.recycler_view_for_album);
         recyclerView.setHasFixedSize(true);
-        if(!(musicFiles.size() < 1)){
-            albumAdapter = new AlbumAdapter(musicFiles,getContext());
+        if(!(albums.size() < 1)){
+            albumAdapter = new AlbumAdapter(albums,getContext());
             recyclerView.setAdapter(albumAdapter);
           //  recyclerView.setNestedScrollingEnabled(false);
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));

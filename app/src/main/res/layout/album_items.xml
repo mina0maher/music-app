@@ -12,11 +12,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryDark">
+
         <ImageView
             android:id="@+id/album_image"
             android:layout_width="match_parent"
             android:layout_height="170dp"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@mipmap/ic_launcher"
+            android:scaleType="centerCrop"/>
         <TextView
             android:id="@+id/album_name"
             android:layout_width="140dp"
