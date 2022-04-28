@@ -56,14 +56,14 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         mediaPlayer.setOnCompletionListener(this);
 
         if(repeatBoolean){
-            repeatBtn.setImageResource(R.drawable.icon_repeat_off);
-        }else{
             repeatBtn.setImageResource(R.drawable.icon_repeat_on);
+        }else{
+            repeatBtn.setImageResource(R.drawable.icon_repeat_off);
         }
         if(shuffleBoolean){
-            shuffleBtn.setImageResource(R.drawable.icon_shuffle_off);
-        }else{
             shuffleBtn.setImageResource(R.drawable.icon_shuffle_on);
+        }else{
+            shuffleBtn.setImageResource(R.drawable.icon_shuffle_off);
         }
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
