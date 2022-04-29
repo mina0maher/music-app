@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AlbumsFragment">
-<androidx.recyclerview.widget.RecyclerView
-    android:id="@+id/recycler_view_for_album"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
-    />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_for_album"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#272727" />
 
 </RelativeLayout>
