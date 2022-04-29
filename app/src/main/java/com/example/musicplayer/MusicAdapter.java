@@ -25,7 +25,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicHolder> {
-    private ArrayList<MusicFiles> List = new ArrayList<>();
+    static ArrayList<MusicFiles> mFiles = new ArrayList<>();
 Context context;
     @NonNull
     @Override
@@ -36,8 +36,8 @@ Context context;
 
     @Override
     public void onBindViewHolder(@NonNull MusicHolder holder, int position) {
-        holder.fileName.setText(List.get(position).getTitle());
-        byte[] image = getAlbumArt(List.get(position).getPath());
+        holder.fileName.setText(mFiles.get(position).getTitle());
+        byte[] image = getAlbumArt(mFiles.get(position).getPath());
         if (image != null) {
             Glide.with(context).asBitmap().load(image).into(holder.albumArt);
         } else {
@@ -72,14 +72,14 @@ Context context;
 
     private void deleteFile(int position, View view) {
         Uri contentUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-        , Long.parseLong(List.get(position).getId()));
-        File file = new File(List.get(position).getPath());
+        , Long.parseLong(mFiles.get(position).getId()));
+        File file = new File(mFiles.get(position).getPath());
         boolean deleted = file.delete();
         if(deleted) {
             context.getContentResolver().delete(contentUri,null,null);
-            List.remove(position);
+            mFiles.remove(position);
             notifyItemRemoved(position);
-            notifyItemRangeChanged(position, List.size());
+            notifyItemRangeChanged(position, mFiles.size());
             Snackbar.make(view, "file deleted : ", Snackbar.LENGTH_SHORT).show();
         }else{
             Snackbar.make(view, "file can't be deleted : ", Snackbar.LENGTH_SHORT).show();
@@ -88,11 +88,11 @@ Context context;
 
     @Override
     public int getItemCount() {
-        return List.size();
+        return mFiles.size();
     }
 
-    public void setList(ArrayList<MusicFiles> List) {
-        this.List = List;
+    public void setmFiles(ArrayList<MusicFiles> List) {
+        this.mFiles = List;
         notifyDataSetChanged();
     }
 
@@ -112,5 +112,10 @@ Context context;
         byte[] art = retriever.getEmbeddedPicture();
         retriever.release();
         return art;
+    }
+    void updateList(ArrayList<MusicFiles> musicFilesArrayList){
+        mFiles = new ArrayList<>();
+        mFiles.addAll(musicFilesArrayList);
+        notifyDataSetChanged();
     }
 }

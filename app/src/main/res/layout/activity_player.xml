@@ -8,40 +8,45 @@
     android:background="@drawable/main_bg"
     android:orientation="vertical"
     tools:context=".PlayerActivity">
-    <RelativeLayout
-    android:id="@+id/layout_top_btn"
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:background="@drawable/gradient_bg"
-    android:layout_alignParentTop="true">
 
-    <ImageView
-        android:id="@+id/back_btn"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/icon_left" />
-    <TextView
+    <RelativeLayout
+        android:id="@+id/layout_top_btn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:text="Now Playing"
-        android:textColor="@color/colorAccent"
-        android:layout_toEndOf="@+id/back_btn"
-        android:layout_toStartOf="@+id/menu_btn"
-        android:gravity="center_horizontal"
-        android:background="@android:color/transparent"
-        android:textSize="18sp"
-        android:textStyle="bold"/>
-    <ImageView
-        android:id="@+id/menu_btn"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/icon_menu" />
-</RelativeLayout>
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/gradient_bg"
+        android:layoutDirection="ltr"
+        >
+
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_left" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/menu_btn"
+            android:layout_toEndOf="@+id/back_btn"
+            android:background="@android:color/transparent"
+            android:gravity="center_horizontal"
+            android:text="Now Playing"
+            android:textColor="@color/colorAccent"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/menu_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_menu" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/card"
@@ -96,22 +101,24 @@
         android:text="this is song artist"/>
 
     <RelativeLayout
+        android:layoutDirection="ltr"
         android:id="@+id/relative_layout_for_bottoms"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:background="@drawable/gradient_bg">
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/gradient_bg"
+        >
 
         <ImageView
             android:id="@+id/id_shuffle"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:src="@drawable/icon_shuffle_off"
-            android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
-            android:layout_marginStart="32dp"/>
+            android:layout_centerVertical="true"
+            android:layout_marginStart="32dp"
+            android:src="@drawable/icon_shuffle_off" />
 
         <ImageView
             android:id="@+id/id_previous"
@@ -133,14 +140,15 @@
             android:focusable="true"
             android:src="@drawable/icon_play"
             tools:ignore="SpeakableTextPresentCheck" />
+
         <ImageView
             android:id="@+id/id_next"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:src="@drawable/icon_skip_next"
             android:layout_centerVertical="true"
+            android:layout_marginStart="16dp"
             android:layout_toEndOf="@+id/play_pause"
-            android:layout_marginStart="16dp"/>
+            android:src="@drawable/icon_skip_next" />
 
         <ImageView
             android:id="@+id/id_repeat"
@@ -152,28 +160,35 @@
             android:src="@drawable/icon_repeat_off" />
 
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/seek_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_above="@+id/relative_layout_for_bottoms"
-        android:layout_marginBottom="15dp">
+        android:layout_marginBottom="15dp"
+        android:layoutDirection="ltr"
+        >
+
         <TextView
             android:id="@+id/duration_played"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
             android:text="1:28"
             android:textColor="@color/colorAccent"
-            android:layout_marginStart="10dp"
-            android:layout_alignParentStart="true"/>
+            android:textDirection="ltr"/>
+
         <TextView
             android:id="@+id/duration_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
             android:text="4:28"
             android:textColor="@color/colorAccent"
-            android:layout_marginEnd="10dp"
-            android:layout_alignParentEnd="true"/>
+            android:textDirection="ltr"/>
 
         <SeekBar
             android:id="@+id/seek_bar"
@@ -183,8 +198,7 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
             android:progressTint="@color/colorAccent"
-            android:thumbTint="@color/colorAccent"
-            />
+            android:thumbTint="@color/colorAccent" />
     </RelativeLayout>
 
 

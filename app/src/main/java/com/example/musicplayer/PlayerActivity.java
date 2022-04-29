@@ -4,6 +4,7 @@ import static com.example.musicplayer.AlbumDetailsAdapter.list;
 import static com.example.musicplayer.MainActivity.musicFiles;
 import static com.example.musicplayer.MainActivity.repeatBoolean;
 import static com.example.musicplayer.MainActivity.shuffleBoolean;
+import static com.example.musicplayer.MusicAdapter.mFiles;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -48,6 +49,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(androidx.appcompat.R.style.Theme_AppCompat_DayNight_NoActionBar);
         setContentView(R.layout.activity_player);
         initView();
         getIntentMethod();
@@ -348,7 +350,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         if(sender!= null&&sender.equals("albumDetails")){
             listSongs = list;
         }else {
-            listSongs = musicFiles;
+            listSongs = mFiles;
         }
         if(listSongs!=null){
             playPauseBtn.setImageResource(R.drawable.icon_pause);

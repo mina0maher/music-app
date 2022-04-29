@@ -18,10 +18,12 @@
         app:tabTextColor="@color/colorAccent"
         app:tabIndicatorHeight="2dp"
         app:tabIndicatorColor="#009688"
-        app:tabIndicator="@drawable/tab_indicator"/>
+        app:tabIndicator="@drawable/tab_indicator"
+        android:layoutDirection="ltr"/>
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:layoutDirection="ltr"/>
 
 </LinearLayout>
