@@ -14,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -33,6 +34,7 @@ public static final int REQUEST_CODE = 15;
 static ArrayList<MusicFiles> musicFiles;
 static boolean shuffleBoolean = false, repeatBoolean = false;
 static ArrayList<MusicFiles> albums = new ArrayList<>();
+private String MY_SORT_PREF ="SortOrder";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,10 +110,25 @@ static ArrayList<MusicFiles> albums = new ArrayList<>();
     }
 
 
-    public static ArrayList<MusicFiles> getAllAudio(Context context){
+    public ArrayList<MusicFiles> getAllAudio(Context context){
+        SharedPreferences preferences =getSharedPreferences(MY_SORT_PREF,MODE_PRIVATE);
+        String sortOrder = preferences.getString("sorting","sortByName");
         ArrayList<String>duplicate = new ArrayList<>();
         ArrayList<MusicFiles> tempAudioList = new ArrayList<>();
+        String order= null;
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        switch (sortOrder){
+            case "sortByName":
+                order = MediaStore.MediaColumns.DISPLAY_NAME +"ASC";
+                break;
+            case "sortByDate":
+                order = MediaStore.MediaColumns.DATE_ADDED +"ASC";
+                break;
+            case "sortBySize":
+                order = MediaStore.MediaColumns.SIZE +"DESC";
+                break;
+
+        }
         String[]projection = {
                 MediaStore.Audio.Media.ALBUM,
                 MediaStore.Audio.Media.TITLE,
@@ -119,7 +136,7 @@ static ArrayList<MusicFiles> albums = new ArrayList<>();
                 MediaStore.Audio.Media.DATA,
                 MediaStore.Audio.Media.ARTIST,
                 MediaStore.Audio.Media._ID};
-        Cursor cursor = context.getContentResolver().query(uri,projection,null,null,null);
+        Cursor cursor = context.getContentResolver().query(uri,projection,null,null,order);
         if(cursor!=null){
             while (cursor.moveToNext()){
                 String album = cursor.getString(0);
@@ -167,5 +184,30 @@ static ArrayList<MusicFiles> albums = new ArrayList<>();
             SongsFragment.musicAdapter.updateList(myFiles);
             return false;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        SharedPreferences.Editor editor = getSharedPreferences(MY_SORT_PREF,MODE_PRIVATE).edit();
+        switch (item.getItemId()){
+            case R.id.by_name:
+                editor.putString("sorting","sortByName");
+                editor.apply();
+                this.recreate();
+                break;
+            case R.id.by_date:
+                editor.putString("sorting","sortByDate");
+                editor.apply();
+                this.recreate();
+                break;
+            case R.id.by_size:
+                editor.putString("sorting","sortBySize");
+                editor.apply();
+                this.recreate();
+                break;
+
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
