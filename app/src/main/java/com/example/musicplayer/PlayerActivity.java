@@ -48,7 +48,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
 
     static Uri uri;
     static ArrayList<MusicFiles> listSongs= new ArrayList<>();
-    static MediaPlayer mediaPlayer;
+   // static MediaPlayer mediaPlayer;
     private Handler handler = new Handler();
     private Thread playThread,prevThread, nextThread;
     MusicService musicService;
@@ -59,9 +59,6 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         setContentView(R.layout.activity_player);
         initView();
         getIntentMethod();
-        songName.setText(listSongs.get(position).getTitle());
-        artistName.setText(listSongs.get(position).getArtist());
-        mediaPlayer.setOnCompletionListener(this);
 
         if(repeatBoolean){
             repeatBtn.setImageResource(R.drawable.icon_repeat_on);
@@ -77,8 +74,8 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(mediaPlayer!=null&&fromUser){
-                    mediaPlayer.seekTo(progress * 1000);
+                if(musicService!=null&&fromUser){
+                    musicService.seekTo(progress * 1000);
                 }
             }
 
@@ -95,8 +92,8 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         PlayerActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(mediaPlayer!=null) {
-                    int mCurrentPosition = mediaPlayer.getCurrentPosition() / 1000;
+                if(musicService!=null) {
+                    int mCurrentPosition = musicService.getCurrentPosition() / 1000;
                     seekBar.setProgress(mCurrentPosition);
                     durationPlayed.setText(formattedTime(mCurrentPosition));
                 }
@@ -164,9 +161,9 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
     }
 
     public void prevBtnClicked() {
-        if (mediaPlayer.isPlaying()){
-            mediaPlayer.stop();
-            mediaPlayer.release();
+        if (musicService.isPlaying()){
+            musicService.stop();
+            musicService.release();
             if(shuffleBoolean&&!repeatBoolean){
                 Random random = new Random();
                 position = random.nextInt(listSongs.size());
@@ -174,27 +171,27 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
                 position = ((position-1)<0?(listSongs.size()-1):(position-1));
             }
             uri = Uri.parse(listSongs.get(position).getPath());
-            mediaPlayer = MediaPlayer.create(getApplicationContext(),uri);
+            musicService.createMediaPlayer(position);
             metaData(uri);
             songName.setText(listSongs.get(position).getTitle());
             artistName.setText(listSongs.get(position).getArtist());
-            seekBar.setMax(mediaPlayer.getDuration()/1000);
+            seekBar.setMax(musicService.getDuration()/1000);
             PlayerActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(mediaPlayer!=null) {
-                        int mCurrentPosition = mediaPlayer.getCurrentPosition() / 1000;
+                    if(musicService!=null) {
+                        int mCurrentPosition = musicService.getCurrentPosition() / 1000;
                         seekBar.setProgress(mCurrentPosition);
                     }
                     handler.postDelayed(this,1000);
                 }
             });
-            mediaPlayer.setOnCompletionListener(this);
+            musicService.OnCompleted();
             playPauseBtn.setBackgroundResource(R.drawable.icon_pause);
-            mediaPlayer.start();
+            musicService.start();
         }else{
-            mediaPlayer.stop();
-            mediaPlayer.release();
+            musicService.stop();
+            musicService.release();
             if(shuffleBoolean&&!repeatBoolean){
                 Random random = new Random();
                 position = random.nextInt(listSongs.size());
@@ -202,16 +199,16 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
                 position = ((position-1)<0?(listSongs.size()-1):(position-1));
             }
             uri = Uri.parse(listSongs.get(position).getPath());
-            mediaPlayer = MediaPlayer.create(getApplicationContext(),uri);
+            musicService.createMediaPlayer(position);
             metaData(uri);
             songName.setText(listSongs.get(position).getTitle());
             artistName.setText(listSongs.get(position).getArtist());
-            seekBar.setMax(mediaPlayer.getDuration()/1000);
+            seekBar.setMax(musicService.getDuration()/1000);
             PlayerActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(mediaPlayer!=null) {
-                        int mCurrentPosition = mediaPlayer.getCurrentPosition() / 1000;
+                    if(musicService!=null) {
+                        int mCurrentPosition = musicService.getCurrentPosition() / 1000;
                         seekBar.setProgress(mCurrentPosition);
                     }
                     handler.postDelayed(this,1000);
@@ -238,9 +235,9 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
     }
 
     public void nextBtnClicked() {
-        if (mediaPlayer.isPlaying()){
-            mediaPlayer.stop();
-            mediaPlayer.release();
+        if (musicService.isPlaying()){
+            musicService.stop();
+            musicService.release();
             if(shuffleBoolean&&!repeatBoolean){
                 Random random = new Random();
                 position = random.nextInt(listSongs.size());
@@ -248,27 +245,27 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
                 position = ((position+1)%listSongs.size());
             }
             uri = Uri.parse(listSongs.get(position).getPath());
-            mediaPlayer = MediaPlayer.create(getApplicationContext(),uri);
+            musicService.createMediaPlayer(position);
             metaData(uri);
             songName.setText(listSongs.get(position).getTitle());
             artistName.setText(listSongs.get(position).getArtist());
-            seekBar.setMax(mediaPlayer.getDuration()/1000);
+            seekBar.setMax(musicService.getDuration()/1000);
             PlayerActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(mediaPlayer!=null) {
-                        int mCurrentPosition = mediaPlayer.getCurrentPosition() / 1000;
+                    if(musicService!=null) {
+                        int mCurrentPosition = musicService.getCurrentPosition() / 1000;
                         seekBar.setProgress(mCurrentPosition);
                     }
                     handler.postDelayed(this,1000);
                 }
             });
-            mediaPlayer.setOnCompletionListener(this);
+            musicService.OnCompleted();
             playPauseBtn.setBackgroundResource(R.drawable.icon_pause);
-            mediaPlayer.start();
+            musicService.start();
         }else{
-            mediaPlayer.stop();
-            mediaPlayer.release();
+            musicService.stop();
+            musicService.release();
             if(shuffleBoolean&&!repeatBoolean){
                 Random random = new Random();
                 position = random.nextInt(listSongs.size());
@@ -276,24 +273,24 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
                 position = ((position+1)%listSongs.size());
             }
             uri = Uri.parse(listSongs.get(position).getPath());
-            mediaPlayer = MediaPlayer.create(getApplicationContext(),uri);
+            musicService.createMediaPlayer(position);
             metaData(uri);
             songName.setText(listSongs.get(position).getTitle());
             artistName.setText(listSongs.get(position).getArtist());
-            seekBar.setMax(mediaPlayer.getDuration()/1000);
+            seekBar.setMax(musicService.getDuration()/1000);
             PlayerActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(mediaPlayer!=null) {
-                        int mCurrentPosition = mediaPlayer.getCurrentPosition() / 1000;
+                    if(musicService!=null) {
+                        int mCurrentPosition = musicService.getCurrentPosition() / 1000;
                         seekBar.setProgress(mCurrentPosition);
                     }
                     handler.postDelayed(this,1000);
                 }
             });
-            mediaPlayer.setOnCompletionListener(this);
+            musicService.OnCompleted();
             playPauseBtn.setBackgroundResource(R.drawable.icon_play);
-            mediaPlayer.start();
+            musicService.start();
         }
     }
 
@@ -314,15 +311,15 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
     }
 
     public void playPauseBtnClicked() {
-        if(mediaPlayer.isPlaying()){
+        if(musicService.isPlaying()){
             playPauseBtn.setImageResource(R.drawable.icon_play);
-            mediaPlayer.pause();
-            seekBar.setMax(mediaPlayer.getDuration()/1000);
+            musicService.pause();
+            seekBar.setMax(musicService.getDuration()/1000);
             PlayerActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(mediaPlayer!=null) {
-                        int mCurrentPosition = mediaPlayer.getCurrentPosition() / 1000;
+                    if(musicService!=null) {
+                        int mCurrentPosition = musicService.getCurrentPosition() / 1000;
                         seekBar.setProgress(mCurrentPosition);
                     }
                     handler.postDelayed(this,1000);
@@ -330,13 +327,13 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
             });
         }else{
             playPauseBtn.setImageResource(R.drawable.icon_pause);
-            mediaPlayer.start();
-            seekBar.setMax(mediaPlayer.getDuration()/1000);
+            musicService.start();
+            seekBar.setMax(musicService.getDuration()/1000);
             PlayerActivity.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(mediaPlayer!=null) {
-                        int mCurrentPosition = mediaPlayer.getCurrentPosition() / 1000;
+                    if(musicService!=null) {
+                        int mCurrentPosition = musicService.getCurrentPosition() / 1000;
                         seekBar.setProgress(mCurrentPosition);
                     }
                     handler.postDelayed(this,1000);
@@ -371,17 +368,10 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
             playPauseBtn.setImageResource(R.drawable.icon_pause);
             uri = Uri.parse(listSongs.get(position).getPath());
         }
-        if(mediaPlayer != null ){
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            mediaPlayer = MediaPlayer.create(getApplicationContext(),uri);
-            mediaPlayer.start();
-        }else{
-            mediaPlayer = MediaPlayer.create(getApplicationContext(),uri);
-            mediaPlayer.start();
-        }
-        seekBar.setMax(mediaPlayer.getDuration()/1000);
-        metaData(uri);
+       Intent  intent= new Intent(this,MusicService.class);
+        intent.putExtra("servicePosition",position);
+        startService(intent);
+
 
     }
 
@@ -493,10 +483,10 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
         nextBtnClicked();
-        if(mediaPlayer != null){
-           // mediaPlayer = MediaPlayer.create(getApplicationContext(),uri);
-         //   mediaPlayer.start();
-            mediaPlayer.setOnCompletionListener(this);
+        if(musicService != null){
+           // musicService.createMediaPlayer(position);
+           // musicService.start();
+            musicService.OnCompleted();
         }
     }
 
@@ -504,7 +494,11 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
     public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
         MusicService.MyBinder myBinder = (MusicService.MyBinder) iBinder;
         musicService = myBinder.getService();
-        Toast.makeText(this,"Connected "+musicService,Toast.LENGTH_SHORT).show();
+        seekBar.setMax(musicService.getDuration()/1000);
+        metaData(uri);
+        songName.setText(listSongs.get(position).getTitle());
+        artistName.setText(listSongs.get(position).getArtist());
+        musicService.OnCompleted();
     }
 
     @Override
