@@ -119,13 +119,13 @@ private String MY_SORT_PREF ="SortOrder";
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         switch (sortOrder){
             case "sortByName":
-                order = MediaStore.MediaColumns.DISPLAY_NAME +"ASC";
+                order = MediaStore.MediaColumns.DISPLAY_NAME +" ASC";
                 break;
             case "sortByDate":
-                order = MediaStore.MediaColumns.DATE_ADDED +"ASC";
+                order = MediaStore.MediaColumns.DATE_ADDED +" ASC";
                 break;
             case "sortBySize":
-                order = MediaStore.MediaColumns.SIZE +"DESC";
+                order = MediaStore.MediaColumns.SIZE +" DESC";
                 break;
 
         }
@@ -189,6 +189,7 @@ private String MY_SORT_PREF ="SortOrder";
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         SharedPreferences.Editor editor = getSharedPreferences(MY_SORT_PREF,MODE_PRIVATE).edit();
+
         switch (item.getItemId()){
             case R.id.by_name:
                 editor.putString("sorting","sortByName");
