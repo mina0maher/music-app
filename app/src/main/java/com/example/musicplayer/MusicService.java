@@ -20,6 +20,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     ArrayList<MusicFiles> musicFiles = new ArrayList<>();
     Uri uri;
     int position = -1;
+    ActionPlaying actionPlaying;
 
     @Override
     public void onCreate() {
@@ -34,6 +35,9 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
         return mBinder;
     }
 
+    public void setPosition(int position) {
+        this.position = position;
+    }
 
 
     public class MyBinder extends Binder{
@@ -91,8 +95,9 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     int getCurrentPosition(){
         return mediaPlayer.getCurrentPosition();
     }
-    void createMediaPlayer(int position){
-        uri = Uri.parse( musicFiles.get(position).getPath());
+    void createMediaPlayer(int currposition){
+        position = currposition;
+        uri = Uri.parse( musicFiles.get(currposition).getPath());
         mediaPlayer = MediaPlayer.create(getBaseContext(),uri);
 
     }
@@ -101,6 +106,14 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     }
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
+
+           actionPlaying.nextBtnClicked();
+
+
+      //  createMediaPlayer(position);
+        //mediaPlayer.start();
+
+      OnCompleted();
 
     }
 }
