@@ -10,7 +10,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.palette.graphics.Palette;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -20,6 +23,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -27,6 +31,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,7 +39,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnCompletionListener {
+public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnCompletionListener ,ActionPlaying, ServiceConnection {
     TextView songName, artistName, durationPlayed, durationTotal;
     ImageView coverArt, nextBtn, prevBtn, backBtn, shuffleBtn, repeatBtn;
     FloatingActionButton playPauseBtn;
@@ -46,6 +51,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
     static MediaPlayer mediaPlayer;
     private Handler handler = new Handler();
     private Thread playThread,prevThread, nextThread;
+    MusicService musicService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,10 +132,19 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
 
     @Override
     protected void onResume() {
+        Intent intent = new Intent(this,MusicService.class);
+        bindService(intent,this,BIND_AUTO_CREATE);
         playThreadBtn();
         nextThreadBtn();
         prevThreadBtn();
         super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        unbindService(this);
     }
 
     private void prevThreadBtn() {
@@ -148,7 +163,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         prevThread.start();
     }
 
-    private void prevBtnClicked() {
+    public void prevBtnClicked() {
         if (mediaPlayer.isPlaying()){
             mediaPlayer.stop();
             mediaPlayer.release();
@@ -222,7 +237,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         nextThread.start();
     }
 
-    private void nextBtnClicked() {
+    public void nextBtnClicked() {
         if (mediaPlayer.isPlaying()){
             mediaPlayer.stop();
             mediaPlayer.release();
@@ -298,7 +313,7 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
         playThread.start();
     }
 
-    private void playPauseBtnClicked() {
+    public void playPauseBtnClicked() {
         if(mediaPlayer.isPlaying()){
             playPauseBtn.setImageResource(R.drawable.icon_play);
             mediaPlayer.pause();
@@ -483,5 +498,17 @@ public class PlayerActivity extends AppCompatActivity implements MediaPlayer.OnC
          //   mediaPlayer.start();
             mediaPlayer.setOnCompletionListener(this);
         }
+    }
+
+    @Override
+    public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+        MusicService.MyBinder myBinder = (MusicService.MyBinder) iBinder;
+        musicService = myBinder.getService();
+        Toast.makeText(this,"Connected "+musicService,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onServiceDisconnected(ComponentName componentName) {
+        musicService = null;
     }
 }
