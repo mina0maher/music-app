@@ -45,4 +45,9 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     // For control over item selection of both touch and mouse driven selection
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
+    //notification
+    implementation "androidx.core:core:1.6.0"
+    //media
+    implementation "androidx.media:media:1.2.0"
+
 }

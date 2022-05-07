@@ -16,11 +16,12 @@ import java.util.ArrayList;
 
 public class MusicService extends Service implements MediaPlayer.OnCompletionListener {
     IBinder mBinder = new MyBinder();
-    MediaPlayer mediaPlayer;
+
+    static MediaPlayer mediaPlayer;
     ArrayList<MusicFiles> musicFiles = new ArrayList<>();
     Uri uri;
     int position = -1;
-    ActionPlaying actionPlaying;
+    ActionPlaying actionPlaying ;
 
     @Override
     public void onCreate() {
@@ -48,10 +49,33 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int myPosition = intent.getIntExtra("servicePosition",-1);
+        String actionName = intent.getStringExtra("ActionName");
         if(myPosition!=-1){
             playMedia(myPosition);
         }
 
+        if(actionName != null){
+            switch (actionName){
+                case "playPause":
+                    Toast.makeText(this,"play",Toast.LENGTH_SHORT).show();
+                    if(actionPlaying != null){
+                        actionPlaying.playPauseBtnClicked();
+                    }
+                    break;
+                case "next":
+                    Toast.makeText(this,"next",Toast.LENGTH_SHORT).show();
+                    if(actionPlaying != null){
+                        actionPlaying.nextBtnClicked();
+                    }
+                    break;
+                case "previous":
+                    Toast.makeText(this,"previous",Toast.LENGTH_SHORT).show();
+                    if(actionPlaying != null){
+                        actionPlaying.prevBtnClicked();
+                    }
+                    break;
+            }
+        }
         return START_STICKY;
     }
 
@@ -106,14 +130,17 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     }
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
+if(actionPlaying!=null) {
+    actionPlaying.nextBtnClicked();
+}
 
-           actionPlaying.nextBtnClicked();
-
-
-      //  createMediaPlayer(position);
-        //mediaPlayer.start();
+     //  createMediaPlayer(position);
+      //  mediaPlayer.start();
 
       OnCompleted();
 
+    }
+    void setCallBack(ActionPlaying actionPlaying){
+        this.actionPlaying = actionPlaying;
     }
 }
