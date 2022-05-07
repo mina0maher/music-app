@@ -65,7 +65,6 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlaying, 
         super.onCreate(savedInstanceState);
         setTheme(androidx.appcompat.R.style.Theme_AppCompat_DayNight_NoActionBar);
         setContentView(R.layout.activity_player);
-        mediaSessionCompat = new MediaSessionCompat(getApplicationContext() , "My Audio");
         initView();
         getIntentMethod();
         if(repeatBoolean){
@@ -195,7 +194,7 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlaying, 
                 }
             });
             musicService.OnCompleted();
-            showNotification(R.drawable.icon_pause);
+            musicService.showNotification(R.drawable.icon_pause);
             playPauseBtn.setBackgroundResource(R.drawable.icon_pause);
             musicService.start();
         }else{
@@ -224,7 +223,7 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlaying, 
                 }
             });
             musicService.OnCompleted();
-            showNotification(R.drawable.icon_play);
+            musicService.showNotification(R.drawable.icon_play);
             playPauseBtn.setBackgroundResource(R.drawable.icon_play);
         }
     }
@@ -272,7 +271,7 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlaying, 
                 }
             });
             musicService.OnCompleted();
-            showNotification(R.drawable.icon_pause);
+            musicService.showNotification(R.drawable.icon_pause);
             playPauseBtn.setBackgroundResource(R.drawable.icon_pause);
             musicService.start();
         }else{
@@ -302,7 +301,7 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlaying, 
                 }
             });
             musicService.OnCompleted();
-            showNotification(R.drawable.icon_play);
+            musicService.showNotification(R.drawable.icon_play);
             playPauseBtn.setBackgroundResource(R.drawable.icon_play);
           musicService.start();
         }
@@ -327,7 +326,7 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlaying, 
     public void playPauseBtnClicked() {
         if(musicService.isPlaying()){
             playPauseBtn.setImageResource(R.drawable.icon_play);
-            showNotification(R.drawable.icon_play);
+            musicService.showNotification(R.drawable.icon_play);
             musicService.pause();
             seekBar.setMax(musicService.getDuration()/1000);
             PlayerActivity.this.runOnUiThread(new Runnable() {
@@ -341,7 +340,7 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlaying, 
                 }
             });
         }else{
-            showNotification(R.drawable.icon_pause);
+            musicService.showNotification(R.drawable.icon_pause);
             playPauseBtn.setImageResource(R.drawable.icon_pause);
             musicService.start();
             seekBar.setMax(musicService.getDuration()/1000);
@@ -384,7 +383,7 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlaying, 
             playPauseBtn.setImageResource(R.drawable.icon_pause);
             uri = Uri.parse(listSongs.get(position).getPath());
         }
-        showNotification(R.drawable.icon_pause);
+
        Intent  intent= new Intent(this,MusicService.class);
         intent.putExtra("servicePosition",position);
         startService(intent);
@@ -509,65 +508,12 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlaying, 
         songName.setText(listSongs.get(position).getTitle());
         artistName.setText(listSongs.get(position).getArtist());
         musicService.OnCompleted();
-
+        musicService.showNotification(R.drawable.icon_pause);
     }
 
     @Override
     public void onServiceDisconnected(ComponentName componentName) {
         musicService = null;
     }
-    void showNotification(int playPauseBtn){
-        Intent intent =new Intent(this,PlayerActivity.class);
-        PendingIntent contentIntent = PendingIntent
-                .getActivity(this,0,intent,0);
 
-///////////////////////////////////////////////////////////////////////////
-        Intent prevIntent =new Intent(this,NotifcationReceiver.class)
-                .setAction(ACTION_PREVIOUS);
-        PendingIntent prevPending = PendingIntent
-                .getBroadcast(this,0,prevIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-///////////////////////////////////////////////////////////////////////////
-        Intent pauseIntent =new Intent(this,NotifcationReceiver.class)
-                .setAction(ACTION_PLAY);
-        PendingIntent pausePending = PendingIntent
-                .getBroadcast(this,0,pauseIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-//////////////////////////////////////////////////////////////////////////
-        Intent nextIntent =new Intent(this,NotifcationReceiver.class)
-                .setAction(ACTION_NEXT);
-        PendingIntent nextPending = PendingIntent
-                .getBroadcast(this,0,nextIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-/////////////////////////////////////////////////////////////////////////
-        byte [] picture = null;
-        picture = getAlbumArt(listSongs.get(position).getPath());
-        Bitmap thumb = null;
-        if(picture != null){
-            thumb = BitmapFactory.decodeByteArray(picture,0,picture.length);
-        }else{
-            thumb = BitmapFactory.decodeResource(getResources(),R.drawable.itunes);
-        }
-        NotificationCompat.Builder notification = new NotificationCompat.Builder(this,CHANNEL_ID_2).setSmallIcon(playPauseBtn)
-                .setLargeIcon(thumb)
-                .setContentTitle(listSongs.get(position).getTitle())
-                .setContentText(listSongs.get(position).getArtist())
-                .addAction(R.drawable.icon_skip_previous,"Previous",prevPending)
-                .addAction(playPauseBtn,"Pause",pausePending)
-                .addAction(R.drawable.icon_skip_next,"next",nextPending)
-                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setOnlyAlertOnce(true)
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-               .setContentIntent(contentIntent);
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(0,notification.build());
-    }
-    private byte[] getAlbumArt(String uri){
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(uri);
-        byte[] art = retriever.getEmbeddedPicture();
-        retriever.release();
-        return art;
-    }
 }
