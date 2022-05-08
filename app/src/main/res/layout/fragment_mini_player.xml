@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".mini_player">
+<RelativeLayout
+    android:id="@+id/card_bottom_player"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryDark"
+    android:padding="5dp">
+    <ImageView
+        android:id="@+id/bottom_album_art"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/itunes"
+        android:scaleType="centerCrop"/>
+    <ImageView
+        android:id="@+id/skip_next_bottom"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/icon_skip_next"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="10dp"
+        />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/play_pause_mini"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_play"
+        android:layout_toStartOf="@+id/skip_next_bottom"
+        android:layout_marginEnd="10dp"
+        app:fabSize="mini"
+        android:layout_centerVertical="true"
+        android:backgroundTint="@color/white"
+        />
+    <TextView
+        android:id="@+id/song_name_mini"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="song name"
+        android:textColor="@color/white"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="15dp"
+        android:layout_toEndOf="@+id/bottom_album_art"
+        android:textSize="18sp"
+        android:maxLines="1"
+        android:layout_toStartOf="@id/play_pause_mini"
+        />
+    <TextView
+        android:id="@+id/song_artist_mini"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="artist name"
+        android:textColor="@color/white"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="15dp"
+        android:layout_toEndOf="@+id/bottom_album_art"
+        android:layout_below="@+id/song_name_mini"
+        android:textSize="15sp"
+        android:maxLines="1"
+        android:layout_toStartOf="@id/play_pause_mini"
+        />
+
+
+</RelativeLayout>
+
+</FrameLayout>

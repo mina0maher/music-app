@@ -23,6 +23,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
@@ -35,6 +36,7 @@ static ArrayList<MusicFiles> musicFiles;
 static boolean shuffleBoolean = false, repeatBoolean = false;
 static ArrayList<MusicFiles> albums = new ArrayList<>();
 private String MY_SORT_PREF ="SortOrder";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

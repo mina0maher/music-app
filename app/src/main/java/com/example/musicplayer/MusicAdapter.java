@@ -60,7 +60,6 @@ Context context;
                 popupMenu.setOnMenuItemClickListener((item)-> {
                     switch(item.getItemId()){
                         case R.id.delete:
-                            Toast.makeText(context,"deleted !",Toast.LENGTH_SHORT).show();
                             deleteFile(position,view);
                             break;
                     }

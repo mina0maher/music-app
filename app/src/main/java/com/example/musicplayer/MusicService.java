@@ -17,6 +17,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -33,17 +34,19 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     Uri uri;
     int position = -1;
     ActionPlaying actionPlaying ;
-
+    MediaSessionCompat mediaSession ;
     @Override
     public void onCreate() {
         super.onCreate();
+        mediaSession = new MediaSessionCompat(getBaseContext(),"My Audio");
+
+        mediaSession.setActive(true);
 
     }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        Toast.makeText(this,"Connected from IBinder",Toast.LENGTH_SHORT).show();
         return mBinder;
     }
 
@@ -68,19 +71,19 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
         if(actionName != null){
             switch (actionName){
                 case "playPause":
-                    Toast.makeText(this,"play",Toast.LENGTH_SHORT).show();
+
                     if(actionPlaying != null){
                         actionPlaying.playPauseBtnClicked();
                     }
                     break;
                 case "next":
-                    Toast.makeText(this,"next",Toast.LENGTH_SHORT).show();
+
                     if(actionPlaying != null){
                         actionPlaying.nextBtnClicked();
                     }
                     break;
                 case "previous":
-                    Toast.makeText(this,"previous",Toast.LENGTH_SHORT).show();
+
                     if(actionPlaying != null){
                         actionPlaying.prevBtnClicked();
                     }
@@ -188,6 +191,7 @@ if(actionPlaying!=null) {
         }else{
             thumb = BitmapFactory.decodeResource(getResources(),R.drawable.itunes);
         }
+        int maxProgress = Integer.parseInt(musicFiles.get(position).getDuration())/1000;
         Notification notification = new NotificationCompat.Builder(this,CHANNEL_ID_2).setSmallIcon(playPauseBtn)
                 .setLargeIcon(thumb)
                 .setContentTitle(musicFiles.get(position).getTitle())
@@ -195,14 +199,27 @@ if(actionPlaying!=null) {
                 .addAction(R.drawable.icon_skip_previous,"Previous",prevPending)
                 .addAction(playPauseBtn,"Pause",pausePending)
                 .addAction(R.drawable.icon_skip_next,"next",nextPending)
-               .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
+                .setStyle(new androidx.media.app.NotificationCompat.MediaStyle())
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setOnlyAlertOnce(true)
+                .setSilent(true)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-                .setContentIntent(contentIntent).build();
+                .setContentIntent(contentIntent)
+
+               .setProgress(maxProgress,getCurrentPosition()/1000,false)
+                .build();
        // NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
        // notificationManager.notify(0,notification.build());
         startForeground(1, notification);
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        if(mediaPlayer.isPlaying()){
+//            showNotification(R.drawable.icon_pause);
+//        }
+
     }
     private byte[] getAlbumArt(String uri){
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
