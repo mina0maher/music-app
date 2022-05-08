@@ -32,11 +32,18 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 public static final int REQUEST_CODE = 15;
-static ArrayList<MusicFiles> musicFiles;
+    public static  boolean SHOW_MINI_PLAYER = false;
+    static ArrayList<MusicFiles> musicFiles;
 static boolean shuffleBoolean = false, repeatBoolean = false;
 static ArrayList<MusicFiles> albums = new ArrayList<>();
 private String MY_SORT_PREF ="SortOrder";
-
+    public static final String MUSIC_LAST_PLAYED = "LAST_PLAYED";
+    private static final String MUSIC_FILE = "STORED" ;
+    public static String PATH_TO_FRAG = null;
+    public static String ARTIST_TO_FRAG = null;
+    public static String SONG_TO_FRAG = null;
+    public static final String ARTIST_NAME = "ARTIST";
+    private static final String SONG_NAME = "SONG" ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -212,5 +219,26 @@ private String MY_SORT_PREF ="SortOrder";
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences preferences = getSharedPreferences(MUSIC_LAST_PLAYED,MODE_PRIVATE);
+        String pathh = preferences.getString(MUSIC_FILE,null);
+        String artistt = preferences.getString(ARTIST_NAME,null);
+        String songg = preferences.getString(SONG_NAME,null);
+        if(pathh != null){
+            SHOW_MINI_PLAYER =true;
+            SONG_TO_FRAG = songg;
+            ARTIST_TO_FRAG = artistt;
+            PATH_TO_FRAG = pathh;
+        }else {
+            SHOW_MINI_PLAYER = false;
+            PATH_TO_FRAG = null;
+            SONG_TO_FRAG = null;
+            ARTIST_TO_FRAG = null;
+            PATH_TO_FRAG = null;
+        }
     }
 }

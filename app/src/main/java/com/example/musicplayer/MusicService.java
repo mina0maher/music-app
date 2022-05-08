@@ -10,12 +10,14 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.widget.Toast;
@@ -34,13 +36,14 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     Uri uri;
     int position = -1;
     ActionPlaying actionPlaying ;
-    MediaSessionCompat mediaSession ;
+    public static final String MUSIC_LAST_PLAYED = "LAST_PLAYED";
+    private static final String MUSIC_FILE = "STORED" ;
+    public static final String ARTIST_NAME = "ARTIST";
+    private static final String SONG_NAME = "SONG" ;
+
     @Override
     public void onCreate() {
         super.onCreate();
-        mediaSession = new MediaSessionCompat(getBaseContext(),"My Audio");
-
-        mediaSession.setActive(true);
 
     }
 
@@ -90,7 +93,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
                     break;
             }
         }
-        return START_STICKY;
+        return START_NOT_STICKY;
     }
 
     private void playMedia(int startPosition) {
@@ -136,6 +139,12 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
     void createMediaPlayer(int currposition){
         position = currposition;
         uri = Uri.parse( musicFiles.get(currposition).getPath());
+        SharedPreferences.Editor editor = getSharedPreferences(MUSIC_LAST_PLAYED,MODE_PRIVATE).edit();
+        editor.putString(MUSIC_FILE,uri.toString());
+        editor.putString(ARTIST_NAME,musicFiles.get(position).getArtist());
+        editor.putString(SONG_NAME,musicFiles.get(position).getTitle());
+        editor.apply();
+
         mediaPlayer = MediaPlayer.create(getBaseContext(),uri);
 
     }
@@ -203,14 +212,20 @@ if(actionPlaying!=null) {
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setOnlyAlertOnce(true)
                 .setSilent(true)
+                .setAutoCancel(false)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setContentIntent(contentIntent)
 
-               .setProgress(maxProgress,getCurrentPosition()/1000,false)
+               //.setProgress(maxProgress,getCurrentPosition()/1000,false)
                 .build();
        // NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
        // notificationManager.notify(0,notification.build());
         startForeground(1, notification);
+
+
+
+
+
 //        try {
 //            Thread.sleep(1000);
 //        } catch (InterruptedException e) {
@@ -228,4 +243,5 @@ if(actionPlaying!=null) {
         retriever.release();
         return art;
     }
+
 }
