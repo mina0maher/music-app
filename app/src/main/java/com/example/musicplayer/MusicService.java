@@ -70,6 +70,11 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
         if(myPosition!=-1){
             playMedia(myPosition);
         }
+//        int currr = intent.getIntExtra("duration",-1);
+//       if(currr!=-1) {
+//          seekTo(currr / 1000);
+//           Toast.makeText(this,String.valueOf(currr),Toast.LENGTH_SHORT).show();
+//       }
 
         if(actionName != null){
             switch (actionName){
@@ -148,6 +153,7 @@ public class MusicService extends Service implements MediaPlayer.OnCompletionLis
         mediaPlayer = MediaPlayer.create(getBaseContext(),uri);
 
     }
+
     void OnCompleted(){
         mediaPlayer.setOnCompletionListener(this);
     }
@@ -244,4 +250,15 @@ if(actionPlaying!=null) {
         return art;
     }
 
+    void  nextBtnClicked(){
+        if(actionPlaying!=null){
+            actionPlaying.nextBtnClicked();
+        }
+    }
+
+    void  playPauseBtnClicked(){
+        if(actionPlaying!=null){
+            actionPlaying.playPauseBtnClicked();
+        }
+    }
 }

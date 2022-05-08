@@ -39,6 +39,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -77,7 +78,12 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlaying, 
         }else{
             shuffleBtn.setImageResource(R.drawable.icon_shuffle_off);
         }
-
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -131,7 +137,10 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlaying, 
                 }
             }
         });
-
+//        Integer currr = getIntent().getIntExtra("duration",0);
+//        if(currr!=null) {
+//            musicService.seekTo((int)currr / 1000);
+//        }
     }
 
     @Override
@@ -383,12 +392,14 @@ public class PlayerActivity extends AppCompatActivity implements ActionPlaying, 
             playPauseBtn.setImageResource(R.drawable.icon_pause);
             uri = Uri.parse(listSongs.get(position).getPath());
         }
-
+ //int abc = getIntent().getIntExtra("duration",-1);
        Intent  intent= new Intent(this,MusicService.class);
         intent.putExtra("servicePosition",position);
+//        if (abc!=-1) {
+//            intent.putExtra("duration", abc);
+//            Toast.makeText(this,"player",Toast.LENGTH_SHORT).show();
+//        }
         startService(intent);
-
-
     }
 
     private void initView() {
